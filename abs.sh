@@ -1,2 +1,2 @@
-sudo apt update
-sudo apt install neofetch
+apt update
+apt install neofetch
