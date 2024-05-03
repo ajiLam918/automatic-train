@@ -1,1 +1,2 @@
 lscpu
+free -h
