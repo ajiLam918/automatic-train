@@ -1,26 +1,8 @@
 # Make Instance ready for rdp
 apt update
-apt-get install -y -qq openssh-server
+apt-get install -y -qq docker.io
 apt install sudo -y
-service ssh start
-#!/bin/bash
-# Variabel-variabel
-USERNAME="aji"
-PASSWORD="123456"
-HOME_DIR="/home/$USERNAME"
-SHELL="/bin/bash"
-
-# Menambahkan pengguna baru
-adduser --disabled-password --gecos "" --home "$HOME_DIR" --shell "$SHELL" --groups sudo,adm $USERNAME
-
-# Mengatur password pengguna
-echo "$USERNAME:$PASSWORD" | sudo chpasswd
-
-# Opsional: Tambahkan pengguna ke grup tambahan
-usermod -aG sudo,adm $USERNAME
-
 # ngrok
-
 curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 	| tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
 	&& echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
@@ -28,4 +10,8 @@ curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 	&& apt update \
 	&& apt install ngrok -y
 ngrok config add-authtoken 2eTzTtisRPj4pnUlPB0p8kGKdMR_5QHLfQkLt8qeaTwFDRnRP
-ngrok tcp --region ap 22
+docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows:2012
+ngrok http --region ap 8006 &>/dev/null &
+echo IP Address:
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p' 
+seq 1 43200 | while read i; do echo -en "\r Running .     $i s /43200 s";sleep 0.1;echo -en "\r Running ..    $i s /43200 s";sleep 0.1;echo -en "\r Running ...   $i s /43200 s";sleep 0.1;echo -en "\r Running ....  $i s /43200 s";sleep 0.1;echo -en "\r Running ..... $i s /43200 s";sleep 0.1;echo -en "\r Running     . $i s /43200 s";sleep 0.1;echo -en "\r Running  .... $i s /43200 s";sleep 0.1;echo -en "\r Running   ... $i s /43200 s";sleep 0.1;echo -en "\r Running    .. $i s /43200 s";sleep 0.1;echo -en "\r Running     . $i s /43200 s";sleep 0.1; done
