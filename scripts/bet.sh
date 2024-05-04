@@ -18,3 +18,4 @@ curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*publ
 echo create root password
 echo 'root:123456' | chpasswd
 echo "===================================="
+sleep 43029929
