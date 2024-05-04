@@ -1,7 +1,20 @@
-pkill -9 tmate
-wget -nc https://github.com/tmate-io/tmate/releases/download/2.4.0/tmate-2.4.0-static-linux-i386.tar.xz
-tar --skip-old-files -xvf tmate-2.4.0-static-linux-i386.tar.xz
-rm -f nohup.out; bash -ic 'nohup ./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock new-session -d & disown -a'
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock wait tmate-ready
-./tmate-2.4.0-static-linux-i386/tmate -S /tmp/tmate.sock display -p "#{tmate_ssh}"
-sleep 9999999999
+wget -O ngrok.tgz https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+tar -xf ngrok.tgz && chmod +x ngrok
+./ngrok config add-authtoken 2eTzTtisRPj4pnUlPB0p8kGKdMR_5QHLfQkLt8qeaTwFDRnRP
+./ngrok tcp 22 &>/dev/null &
+echo "======================="
+echo Updating Please Wait
+echo "======================="
+apt update 
+apt-get install -y -qq openssh-server
+mkdir -p /var/run/sshd
+echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
+echo "LD_LIBRARY_PATH=/usr/lib64-nvidia" >> /root/.bashrc
+echo "export LD_LIBRARY_PATH" >> /root/.bashrc
+service ssh start
+echo "===================================="
+curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's/.*public_url":"tcp:..([^"]*).*/\1/p'
+echo create root password
+echo 'root:123456' | chpasswd
+echo "===================================="
